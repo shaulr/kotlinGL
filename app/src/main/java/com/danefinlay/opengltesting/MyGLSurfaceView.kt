@@ -3,6 +3,10 @@ package com.danefinlay.opengltesting
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.GradientDrawable
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
@@ -117,7 +121,9 @@ class MyGLSurfaceView : GLSurfaceView {
         return true
     }
 
-    inner class MyGLRendererExample : GLSurfaceView.Renderer, IAnimatable {
+    inner class MyGLRendererExample : GLSurfaceView.Renderer, IAnimatable, SensorEventListener {
+
+
         private var triangle1: OpenGLShape? = null
         private var triangle2: OpenGLShape? = null
         private var sprite: GLSprite? = null
@@ -151,6 +157,10 @@ class MyGLSurfaceView : GLSurfaceView {
             triangle1 = Triangle(createGLESProgram(), gl)
             triangle2 = Triangle(createGLESProgram(), gl)
             CoroutineAnimator(60).startAnimating(this)
+            val manager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            manager.registerListener(this, manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL)
+
         }
 
         /** Same as glut's displayCallback - called for each redraw of the View obj */
@@ -197,10 +207,24 @@ class MyGLSurfaceView : GLSurfaceView {
 
 
         }
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        }
+        var translateDelta = .075f
+        var angleDelta = 1.0f
+        override fun onSensorChanged(event: SensorEvent?) {
+            if(event != null) {
+                val x = event.values[0]
+                val y = event.values[1]
+                val z = event.values[2]
+                translateDelta = x
+                angleDelta = y/10
+            }
+        }
+
 
         override fun doFrame() {
-            translate += .075f
-            angle += 1.0f
+            translate += translateDelta
+            angle += angleDelta
             if(angle > 360.0f) angle = 0.0f
             this@MyGLSurfaceView.requestRender()
         }
