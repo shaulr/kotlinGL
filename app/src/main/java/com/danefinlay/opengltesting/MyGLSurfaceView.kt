@@ -117,7 +117,7 @@ class MyGLSurfaceView : GLSurfaceView {
         return true
     }
 
-    inner class MyGLRendererExample : GLSurfaceView.Renderer {
+    inner class MyGLRendererExample : GLSurfaceView.Renderer, IAnimatable {
         private var triangle1: OpenGLShape? = null
         private var triangle2: OpenGLShape? = null
         private var sprite: GLSprite? = null
@@ -198,7 +198,7 @@ class MyGLSurfaceView : GLSurfaceView {
 
         }
 
-        fun recomputeAnimation() {
+        override fun doFrame() {
             translate += .075f
             angle += 1.0f
             if(angle > 360.0f) angle = 0.0f

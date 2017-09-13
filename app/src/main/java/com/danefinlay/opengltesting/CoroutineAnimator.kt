@@ -8,7 +8,7 @@ import kotlinx.coroutines.experimental.launch
  */
 class CoroutineAnimator(fps: Int) {
     val period = 1000 / fps
-    fun startAnimating( renderer: MyGLSurfaceView.MyGLRendererExample) {
+    fun startAnimating( animatable: IAnimatable) {
         val startTime = System.currentTimeMillis()
         val job = launch(CommonPool) {
             var nextFrameTime = startTime
@@ -16,7 +16,7 @@ class CoroutineAnimator(fps: Int) {
             while (isActive) { // cancellable computation loop
                 // print a message twice a second
                 if (System.currentTimeMillis() >= nextFrameTime) {
-                    renderer.recomputeAnimation()
+                    animatable.doFrame()
                     nextFrameTime += period
                 }
             }

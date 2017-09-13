@@ -1,10 +1,7 @@
 package com.danefinlay.opengltesting
 
-import android.content.Context
-import android.opengl.GLSurfaceView
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 
 class MainActivity : AppCompatActivity() {
 
