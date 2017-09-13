@@ -28,6 +28,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    //coroutines
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:0.18'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
 }
 repositories {
     mavenCentral()

@@ -42,7 +42,7 @@ class MyGLSurfaceView : GLSurfaceView {
 
         // Render the view only when there is a change in the drawing data
         // To allow the triangle to rotate automatically, this line is commented out:
-        renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+        renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
 
         // Set up gesture detectors
         scaleGestureDetector = ScaleGestureDetector(this.context, object : OnScaleGestureListener {
@@ -150,6 +150,7 @@ class MyGLSurfaceView : GLSurfaceView {
             GLES20.glClearColor(255F, 0F, 0F, 1F)
             triangle1 = Triangle(createGLESProgram(), gl)
             triangle2 = Triangle(createGLESProgram(), gl)
+            CoroutineAnimator(60).startAnimating(this)
         }
 
         /** Same as glut's displayCallback - called for each redraw of the View obj */
@@ -193,10 +194,15 @@ class MyGLSurfaceView : GLSurfaceView {
 
             triangle1?.draw(mMVPMatrix)
             triangle2?.draw(mMVPMatrix2)
+
+
+        }
+
+        fun recomputeAnimation() {
             translate += .075f
             angle += 1.0f
             if(angle > 360.0f) angle = 0.0f
-
+            this@MyGLSurfaceView.requestRender()
         }
 
         /** Same as glut's reshape callback function for when the window geometry changes
